@@ -970,17 +970,9 @@ def get_active_bots():
 @app.route('/api/bot/<bot_id>/revenue', methods=['GET'])
 def get_bot_revenue_api(bot_id):
     if session.get("auth", False):
-        period = request.args.get('period', '30d')
+        period = request.args.get('period', 'today')
         
-        days_map = {
-            '1d': 1,
-            '7d': 7,
-            '15d': 15,
-            '30d': 30
-        }
-        
-        days = days_map.get(period, 30)
-        revenue = manager.get_bot_revenue_by_period(bot_id, days)
+        revenue = manager.get_bot_revenue_by_period(bot_id, period)  # Passa a string direto!
         commission = revenue * 0.01
         
         return jsonify({
